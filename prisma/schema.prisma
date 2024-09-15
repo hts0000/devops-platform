@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  email         String         @unique
+  businessLines BusinessLine[] // 一个用户可以负责多个业务线
+  projects      Project[] // 一个用户可以负责多个项目
+  applications  Application[] // 一个用户可以负责多个应用
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // 软删除字段
+}
+
+model BusinessLine {
+  id            Int       @id @default(autoincrement())
+  name          String    @unique
+  description   String?
+  responsibleId Int // 外键指向用户
+  responsible   User      @relation(fields: [responsibleId], references: [id]) // 关联用户
+  projects      Project[] // 关联多个项目
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // 软删除字段
+}
+
+model Project {
+  id             Int           @id @default(autoincrement())
+  name           String        @unique
+  description    String?
+  responsibleId  Int // 外键指向用户
+  responsible    User          @relation(fields: [responsibleId], references: [id]) // 关联用户
+  businessLineId Int
+  businessLine   BusinessLine  @relation(fields: [businessLineId], references: [id]) // 关联业务线
+  applications   Application[] // 关联多个应用
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // 软删除字段
+}
+
+model Application {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  description   String?
+  responsibleId Int // 外键指向用户
+  responsible   User    @relation(fields: [responsibleId], references: [id]) // 关联用户
+  projectId     Int
+  project       Project @relation(fields: [projectId], references: [id]) // 关联项目
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // 软删除字段
+}
