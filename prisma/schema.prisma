@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id            Int            @id @default(autoincrement())
+  uid           String         @unique
   name          String         @unique
   email         String         @unique
   businessLines BusinessLine[] // 一个用户可以负责多个业务线
