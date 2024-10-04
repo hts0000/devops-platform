@@ -75,4 +75,7 @@ docker exec -it devops-mysql mysql -uroot -p123456
 
 # migrate
 npx prisma migrate dev --name init
+
+# update schema
+npx prisma db push
 ```
