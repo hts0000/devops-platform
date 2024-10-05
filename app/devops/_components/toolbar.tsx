@@ -9,7 +9,7 @@ type ToolbarProps = {};
 
 const Toolbar = (props: ToolbarProps) => {
   return (
-    <div className="flex m-2 mb-7 items-center justify-between bg-white">
+    <div className="flex mb-7 items-center justify-between bg-white">
       <div className="flex">
         <ToolbarButton icon={Plus} label="新建" />
         <ToolbarButton icon={Trash} label="删除" />
