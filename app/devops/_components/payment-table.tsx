@@ -40,120 +40,48 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 
-const data: AppInfo[] = [
+const data: Payment[] = [
   {
-    id: "m5gr84i1",
-    bizLine: "海外供应链",
-    project: "CPS集采系统",
-    app: "cps-1",
-    shortcuts: {
-      Gitlab: "",
-      Jenkins: "",
-      K8S: "",
-      SLS: "",
-    },
-    status: "live",
+    id: "m5gr84i9",
+    amount: 316,
+    status: "success",
+    email: "ken99@yahoo.com",
   },
   {
-    id: "m5gr84i2",
-    bizLine: "国内供应链",
-    project: "ISCM系统",
-    app: "iscm-1",
-    shortcuts: {
-      Gitlab: "",
-      Jenkins: "",
-      K8S: "",
-      SLS: "",
-    },
-    status: "live",
+    id: "3u1reuv4",
+    amount: 242,
+    status: "success",
+    email: "Abe45@gmail.com",
   },
   {
-    id: "m5gr84i3",
-    bizLine: "国内供应链",
-    project: "ISCM系统",
-    app: "iscm-1",
-    shortcuts: {
-      Gitlab: "",
-      Jenkins: "",
-      K8S: "",
-      SLS: "",
-    },
-    status: "live",
+    id: "derv1ws0",
+    amount: 837,
+    status: "processing",
+    email: "Monserrat44@gmail.com",
   },
   {
-    id: "m5gr84i4",
-    bizLine: "国内供应链",
-    project: "ISCM系统",
-    app: "iscm-1",
-    shortcuts: {
-      Gitlab: "",
-      Jenkins: "",
-      K8S: "",
-      SLS: "",
-    },
-    status: "live",
+    id: "5kma53ae",
+    amount: 874,
+    status: "success",
+    email: "Silas22@gmail.com",
   },
   {
-    id: "m5gr84i5",
-    bizLine: "国内供应链",
-    project: "ISCM系统",
-    app: "iscm-1",
-    shortcuts: {
-      Gitlab: "",
-      Jenkins: "",
-      K8S: "",
-      SLS: "",
-    },
-    status: "live",
-  },
-  {
-    id: "m5gr84i6",
-    bizLine: "国内供应链",
-    project: "ISCM系统",
-    app: "iscm-1",
-    shortcuts: {
-      Gitlab: "",
-      Jenkins: "",
-      K8S: "",
-      SLS: "",
-    },
-    status: "live",
-  },
-  {
-    id: "m5gr84i7",
-    bizLine: "国内供应链",
-    project: "ISCM系统",
-    app: "iscm-1",
-    shortcuts: {
-      Gitlab: "",
-      Jenkins: "",
-      K8S: "",
-      SLS: "",
-    },
-    status: "live",
+    id: "bhqecj4p",
+    amount: 721,
+    status: "failed",
+    email: "carmella@hotmail.com",
   },
 ];
 
-type Shortcut = {
-  Gitlab?: string;
-  Jenkins?: string;
-  K8S?: string;
-  SLS?: string;
-};
-
-export type AppInfo = {
+export type Payment = {
   id: string;
-  bizLine: string;
-  project: string;
-  environment: "TEST" | "PRE" | "PRD";
-  app: string;
-  shortcuts?: Shortcut;
-  status?: "live" | "dead";
+  amount: number;
+  status: "pending" | "processing" | "success" | "failed";
+  email: string;
 };
 
-export const columns: ColumnDef<AppInfo>[] = [
+export const columns: ColumnDef<Payment>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -177,38 +105,41 @@ export const columns: ColumnDef<AppInfo>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "bizLine",
-    header: "业务",
-    cell: ({ row }) => <div>{row.getValue("bizLine")}</div>,
-    size: 400,
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("status")}</div>
+    ),
   },
   {
-    accessorKey: "project",
-    header: "项目",
-    cell: ({ row }) => <div>{row.getValue("project")}</div>,
-    size: 500,
-  },
-  {
-    accessorKey: "app",
+    accessorKey: "email",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          应用
+          Email
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("app")}</div>,
-    size: 400,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
-    accessorKey: "shortcut",
-    header: "传送门",
-    cell: ({ row }) => <div>{row.getValue("shortcuts")}</div>,
-    size: 500,
+    accessorKey: "amount",
+    header: () => <div className="text-right">Amount</div>,
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amount"));
+
+      // Format the amount as a dollar amount
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
   },
   {
     id: "actions",
@@ -243,7 +174,7 @@ export const columns: ColumnDef<AppInfo>[] = [
 
 type AppTableProps = {};
 
-const AppTable = (props: AppTableProps) => {
+const PaymentTable = (props: AppTableProps) => {
   // TODO: label
   // format: brand-appname-program-environment
   // brand: miniso/toptoy/wow
@@ -271,9 +202,6 @@ const AppTable = (props: AppTableProps) => {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    enableColumnResizing: true,
-    columnResizeMode: "onEnd",
-    columnResizeDirection: "rtl",
     state: {
       sorting,
       columnFilters,
@@ -327,10 +255,7 @@ const AppTable = (props: AppTableProps) => {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead
-                      key={header.id}
-                      className={`w-[${header.column.getSize()}px]`}
-                    >
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -401,4 +326,4 @@ const AppTable = (props: AppTableProps) => {
   );
 };
 
-export default AppTable;
+export default PaymentTable;
