@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "buf/validate/validate.proto";
+
+package manager.v1;
+
+option go_package = "devops-platform-backend/manager/api/gen/v1;managerpb";
+
+message BizLine {
+    string name = 1 [(buf.validate.field).cel = {
+        id: "bizline_name_format"
+        message: "bizline name must be 3 - 18 characters long and only contain letters and digits"
+        // `this.matches` match the string against a regex pattern, and evaluates to a bool.
+        expression: "this.matches('^[A-Za-z0-9]{3,18}$')"
+      }];
+    uint64 responsible_id = 2 [(buf.validate.field).cel = {
+        id: "bizline_responseible_id"
+        message: "responseible id must exist"
+        expression: "this > 0"
+      }];
+    string description = 3 [(buf.validate.field).string.max_len = 1024];
+}
+message BizLineEntity {
+    uint64 id = 1;
+    BizLine bizLine = 2;
+}
+message CreateBizLineRequest {}
+message CreateBizLineResponse {
+    uint64 id = 1;
+}
+message DeleteBizLineRequest {
+    uint64 id = 1;
+}
+message DeleteBizLineResponse {}
+message UpdateBizLineRequest {}
+message UpdateBizLineResponse {}
+message GetBizLineRequest {
+    uint64 id = 1;
+}
+message GetBizLineResponse {}
+message GetBizLinesRequest {}
+message GetBizLinesResponse {
+    repeated BizLineEntity bizlines = 1;
+}
+
+service BizLineService {
+    rpc CreateBizLine (BizLine) returns (CreateBizLineResponse) {
+        option (google.api.http) = {
+            post: "/v1/manager/bizline"
+            body: "*"
+        };
+    };
+    rpc DeleteBizLine (DeleteBizLineRequest) returns (DeleteBizLineResponse) {
+        option (google.api.http) = {
+            delete: "/v1/manager/bizline/{id}"
+        };
+    };
+    rpc UpdateBizLine (BizLineEntity) returns (UpdateBizLineResponse) {
+        option (google.api.http) = {
+            put: "/v1/manager/bizline/{id}"
+            body: "*"
+        };
+    };
+    rpc GetBizLine (GetBizLineRequest) returns (BizLineEntity) {
+        option (google.api.http) = {
+            get: "/v1/manager/bizline/{id}"
+        };
+    };
+    rpc GetBizLines (GetBizLinesRequest) returns (GetBizLinesResponse) {
+        option (google.api.http) = {
+            get: "/v1/manager/bizlines"
+        };
+    };
+}
+
+message Project {}
+message ProjectEntity {
+    uint64 id = 1;
+    Project project = 2;
+}
+message CreateProjectRequest {}
+message CreateProjectResponse {}
+message DeleteProjectRequest {}
+message DeleteProjectResponse {}
+message UpdateProjectRequest {}
+message UpdateProjectResponse {}
+message GetProjectRequest {}
+message GetProjectResponse {}
+message GetProjectsRequest {}
+message GetProjectsResponse {}
+
+service ProjectService {
+    rpc CreateProject (CreateProjectRequest) returns (CreateProjectResponse);
+    rpc DeleteProject (DeleteProjectRequest) returns (DeleteProjectResponse);
+    rpc UpdateProject (UpdateProjectRequest) returns (UpdateProjectResponse);
+    rpc GetProject (GetProjectRequest) returns (GetProjectResponse);
+    rpc GetProjects (GetProjectsRequest) returns (GetProjectsResponse);
+}
+
+message App {}
+message AppEntity {
+    uint64 id = 1;
+    App app = 2;
+}
+message CreateAppRequest {}
+message CreateAppResponse {}
+message DeleteAppRequest {}
+message DeleteAppResponse {}
+message UpdateAppRequest {}
+message UpdateAppResponse {}
+message GetAppRequest {}
+message GetAppResponse {}
+message GetAppsRequest {}
+message GetAppsResponse {}
+
+service AppService {
+    rpc CreateProject (CreateAppRequest) returns (CreateAppResponse);
+    rpc DeleteProject (DeleteAppRequest) returns (DeleteAppResponse);
+    rpc UpdateProject (UpdateAppRequest) returns (UpdateAppResponse);
+    rpc GetProject (GetAppRequest) returns (GetAppResponse);
+    rpc GetProjects (GetAppsRequest) returns (GetAppsResponse);
+}
