@@ -1,30 +1,49 @@
 package dao
 
 import (
+	"context"
 	"shared/model"
 )
 
-func (m *MySQL) CreateBizLine(b *model.BizLine) (uint, error) {
-	err := m.db.Create(b).Error
-	return b.ID, err
+func (m *MySQL) CreateBizLine(ctx context.Context, b *model.BizLine) error {
+	tx := m.db.WithContext(ctx)
+	return tx.Create(b).Error
 }
 
-func (m *MySQL) DeleteBizLine(bid uint) (*model.BizLine, error) {
+func (m *MySQL) DeleteBizLine(ctx context.Context, bid uint) (*model.BizLine, error) {
+	tx := m.db.WithContext(ctx)
 	b := &model.BizLine{}
-	err := m.db.Delete(b, bid).Error
+	err := tx.Delete(b, bid).Error
 	return b, err
 }
 
-func (m *MySQL) UpdateBizLine(b *model.BizLine) error {
-	return m.db.Save(b).Error
+func (m *MySQL) UpdateBizLine(ctx context.Context, b *model.BizLine) error {
+	tx := m.db.WithContext(ctx)
+	return tx.Save(b).Error
 }
 
-func (m *MySQL) GetBizLine(bid uint) (*model.BizLine, error) {
+func (m *MySQL) GetBizLineByID(ctx context.Context, bid uint) (*model.BizLine, error) {
+	tx := m.db.WithContext(ctx)
 	b := &model.BizLine{}
-	err := m.db.Take(b, bid).Error
+	err := tx.Take(b, bid).Error
 	return b, err
 }
 
-func (m *MySQL) GetBizLines(offset, limit uint) ([]*model.BizLine, error) {
+func (m *MySQL) GetBizlineByName(ctx context.Context, name string) (*model.BizLine, error) {
+	tx := m.db.WithContext(ctx)
+	b := &model.BizLine{}
+	err := tx.Where("business_line_name = ?", name).First(b).Error
+	return b, err
+}
 
+func (m *MySQL) GetBizLines(ctx context.Context, page, pageSize int) ([]*model.BizLine, int64, error) {
+	tx := m.db.WithContext(ctx)
+	bizs := make([]*model.BizLine, 0, pageSize)
+	page = (page - 1) * pageSize
+
+	var total int64
+	tx.Model(&model.BizLine{}).Count(&total)
+	err := tx.Offset(page).Limit(pageSize).Find(&bizs).Error
+
+	return bizs, total, err
 }

@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type BizLine struct {
 	gorm.Model
-	Name          string `json:"name" column:"name"`
-	ResponsibleID uint   `json:"responsible_id" column:"responsible_id"`
-	Description   string `json:"description" column:"description"`
+	Name          string `gorm:"column:business_line_name"`
+	ResponsibleID uint   `gorm:"column:responsible_id"`
+	Description   string `gorm:"column:description"`
 }
 
 func (b *BizLine) TableName() string {

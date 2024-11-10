@@ -137,6 +137,10 @@ go get github.com/bufbuild/protovalidate-go
 go get -u gorm.io/gorm
 go get -u gorm.io/driver/mysql
 
+# docker
+go get github.com/docker/docker/api/types/container
+go get github.com/docker/docker/client
+
 # prometheus
 
 # opentelemetry

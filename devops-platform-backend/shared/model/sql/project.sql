@@ -15,6 +15,10 @@ CREATE TABLE IF NOT EXISTS `project` (
     `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'gorm维护，删除时间',
     PRIMARY KEY (`id`),
     KEY `idx_project_name` (`project_name`, `deleted_at`) COMMENT '项目名索引',
-    KEY `idx_responsible_id` (`responsible_id`) COMMENT '负责人索引',
+    KEY `idx_prd_responsible_id` (`prd_responsible_id`) COMMENT '产品负责人索引',
+    KEY `idx_dev_responsible_id` (`dev_responsible_id`) COMMENT '开发负责人索引',
+    KEY `idx_test_responsible_id` (`test_responsible_id`) COMMENT '测试负责人索引',
+    KEY `idx_sre_responsible_id` (`sre_responsible_id`) COMMENT 'sre负责人索引',
+    KEY `idx_dba_responsible_id` (`dba_responsible_id`) COMMENT 'dba负责人索引',
     KEY `idx_business_line_id` (`business_line_id`) COMMENT '业务线关联索引'
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目表';

@@ -6,6 +6,8 @@ import (
 	"manager/dao"
 
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ProjectService struct {
@@ -14,8 +16,22 @@ type ProjectService struct {
 	managerpb.UnimplementedProjectServiceServer
 }
 
-func (s *ProjectService) CreateProject(context.Context, *managerpb.CreateProjectRequest) (*managerpb.CreateProjectResponse, error)
-func (s *ProjectService) DeleteProject(context.Context, *managerpb.DeleteProjectRequest) (*managerpb.DeleteProjectResponse, error)
-func (s *ProjectService) UpdateProject(context.Context, *managerpb.UpdateProjectRequest) (*managerpb.UpdateProjectResponse, error)
-func (s *ProjectService) GetProject(context.Context, *managerpb.GetProjectRequest) (*managerpb.GetProjectResponse, error)
-func (s *ProjectService) GetProjects(context.Context, *managerpb.GetProjectsRequest) (*managerpb.GetProjectsResponse, error)
+func (s *ProjectService) CreateProject(context.Context, *managerpb.CreateProjectRequest) (*managerpb.CreateProjectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
+}
+
+func (s *ProjectService) DeleteProject(context.Context, *managerpb.DeleteProjectRequest) (*managerpb.DeleteProjectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
+}
+
+func (s *ProjectService) UpdateProject(context.Context, *managerpb.UpdateProjectRequest) (*managerpb.UpdateProjectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
+}
+
+func (s *ProjectService) GetProject(context.Context, *managerpb.GetProjectRequest) (*managerpb.GetProjectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
+}
+
+func (s *ProjectService) GetProjects(context.Context, *managerpb.GetProjectsRequest) (*managerpb.GetProjectsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
+}

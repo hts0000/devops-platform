@@ -39,9 +39,22 @@ message GetBizLineRequest {
     uint64 id = 1;
 }
 message GetBizLineResponse {}
-message GetBizLinesRequest {}
+message GetBizLinesRequest {
+    int64 page = 1;
+    int64 page_size = 2 [(buf.validate.field).cel = {
+        id: "pagination_offset"
+        message: "offset must be one of 10/20/50/100"
+        // Arithmetic operators include `+`, `-`, `*`, `/`, `%`.
+        expression:
+        "this == 10"
+        "|| this == 20"
+        "|| this == 50"
+        "|| this == 100"
+    }];
+}
 message GetBizLinesResponse {
     repeated BizLineEntity bizlines = 1;
+    int64 total_count  = 2;
 }
 
 service BizLineService {

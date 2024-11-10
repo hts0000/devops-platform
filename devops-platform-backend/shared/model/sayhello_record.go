@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type SayHelloRecord struct {
 	gorm.Model
-	Name string `json:"name" column:"name"`
+	Name string `gorm:"column:name"`
 }
 
 func (r *SayHelloRecord) TableName() string {

@@ -59,8 +59,8 @@ gen() {
        local services="$@"
        for service in ${services}; do
               gen_go_pb ${service}
-              gen_ts_pb ${service}
+              # gen_ts_pb ${service}
        done
 }
 
-gen "hello" "auth"
+gen "hello" "manager"

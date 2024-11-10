@@ -6,6 +6,7 @@ import (
 	"hello/hello"
 	"log"
 	"shared/server"
+	"time"
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -24,6 +25,14 @@ func main() {
 	if err != nil {
 		logger.Fatal("open database connction failed", zap.Error(err))
 	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		logger.Fatal("get database failed", zap.Error(err))
+	}
+	sqlDB.SetMaxOpenConns(50)
+	sqlDB.SetMaxIdleConns(50)
+	sqlDB.SetConnMaxIdleTime(time.Second * 3)
 
 	logger.Fatal("run grpc server failed", zap.Error(server.RunGRPCServer(&server.GRPCConfig{
 		Name:   "hello",
