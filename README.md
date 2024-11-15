@@ -122,7 +122,22 @@ pnpm run dev
 - exporter+prometheus
 
 ## Frontend
+```bash
+npx create-next-app@14
+npx shadcn@latest init
+npx shadcn@latest add button
+npx shadcn@latest add sidebar
+npx shadcn@latest add table
+npx shadcn@latest add checkbox
+npx shadcn@latest add dropdown-menu
+npm install @tanstack/react-table
 
+
+npm install ts-proto
+npm install long
+npm install zod
+npm install @radix-ui/react-icons
+```
 
 ## Backend
 ```bash
