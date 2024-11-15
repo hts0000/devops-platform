@@ -4,6 +4,7 @@ import (
 	"context"
 	hellopb "hello/api/gen/v1"
 	"log"
+	managerpb "manager/api/gen/v1"
 	"net/http"
 	"shared/server"
 
@@ -71,6 +72,21 @@ func main() {
 			addr:         "localhost:28081",
 			registerFunc: hellopb.RegisterGreeterHandlerFromEndpoint,
 		},
+		{
+			name:         "bizline",
+			addr:         "localhost:18081",
+			registerFunc: managerpb.RegisterBizLineServiceHandlerFromEndpoint,
+		},
+		// {
+		// 	name:         "project",
+		// 	addr:         "localhost:18081",
+		// 	registerFunc: managerpb.RegisterBizLineServiceHandlerFromEndpoint,
+		// },
+		// {
+		// 	name:         "application",
+		// 	addr:         "localhost:18081",
+		// 	registerFunc: managerpb.RegisterBizLineServiceHandlerFromEndpoint,
+		// },
 	}
 
 	for _, s := range serverConfig {

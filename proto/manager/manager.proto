@@ -25,7 +25,6 @@ message BizLineEntity {
     uint64 id = 1;
     BizLine bizLine = 2;
 }
-message CreateBizLineRequest {}
 message CreateBizLineResponse {
     uint64 id = 1;
 }
@@ -33,12 +32,10 @@ message DeleteBizLineRequest {
     uint64 id = 1;
 }
 message DeleteBizLineResponse {}
-message UpdateBizLineRequest {}
 message UpdateBizLineResponse {}
 message GetBizLineRequest {
     uint64 id = 1;
 }
-message GetBizLineResponse {}
 message GetBizLinesRequest {
     int64 page = 1;
     int64 page_size = 2 [(buf.validate.field).cel = {
