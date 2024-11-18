@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	hellopb "hello/api/gen/v1"
+	"io"
 	"log"
 	managerpb "manager/api/gen/v1"
 	"net/http"
 	"shared/server"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/rs/cors"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -55,7 +57,12 @@ func main() {
 		runtime.WithMiddlewares(func(hf runtime.HandlerFunc) runtime.HandlerFunc {
 			return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 				// TODO: add traceid
-				logger.Info("received request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("traceid", ""))
+				b, err := io.ReadAll(r.Body)
+				if err != nil {
+					panic(err)
+				}
+				body := string(b)
+				logger.Info("received request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("body", body), zap.String("traceid", ""))
 				hf(w, r, pathParams)
 				logger.Info("handled request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("traceid", ""))
 			}
@@ -101,5 +108,5 @@ func main() {
 
 	addr := ":18080"
 	logger.Info("grpc gateway started", zap.String("addr", addr))
-	logger.Fatal("cannot listen and server", zap.Error(http.ListenAndServe(addr, mux)))
+	logger.Fatal("cannot listen and server", zap.Error(http.ListenAndServe(addr, cors.Default().Handler(mux))))
 }
