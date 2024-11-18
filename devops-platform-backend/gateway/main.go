@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	hellopb "hello/api/gen/v1"
 	"io"
@@ -57,13 +58,19 @@ func main() {
 		runtime.WithMiddlewares(func(hf runtime.HandlerFunc) runtime.HandlerFunc {
 			return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 				// TODO: add traceid
-				b, err := io.ReadAll(r.Body)
+				body, err := io.ReadAll(r.Body)
+
 				if err != nil {
 					panic(err)
 				}
-				body := string(b)
-				logger.Info("received request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("body", body), zap.String("traceid", ""))
+
+				logger.Info("received request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("body", string(body)), zap.String("traceid", ""))
+
+				// 重置Body为未读
+				r.Body = io.NopCloser(bytes.NewBuffer(body))
+
 				hf(w, r, pathParams)
+
 				logger.Info("handled request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("traceid", ""))
 			}
 		}),
