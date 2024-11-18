@@ -25,41 +25,37 @@ gen_go_pb() {
               ${service_name}.proto
 }
 
-
-# Path to this cli protobufjs-cli
-PROTOC_GEN_JS_PATH="${FRONTEND_GEN_PATH}/node_modules/.bin/pbjs"
-PROTOC_GEN_TS_PATH="${FRONTEND_GEN_PATH}/node_modules/.bin/pbts"
-
 gen_ts_pb() {
        local service_name="$1"
-
-       if [[ ! -d "${FRONTEND_GEN_PATH}/api/gen/v1/${service_name}" ]]; then
-              mkdir -p "${FRONTEND_GEN_PATH}/api/gen/v1/${service_name}"
-       fi
+       local gen_path="${FRONTEND_GEN_PATH}/src/lib/${service_name}/api/gen/v1"
+       local ts_gen_path="${FRONTEND_GEN_PATH}/node_modules/.bin/protoc-gen-ts_proto"
        
-       ${PROTOC_GEN_JS_PATH} -t static-module -w es6 ${ROOT_PATH}/proto/${service_name}/${service_name}.proto \
-              --no-create --no-encode --no-verify --no-delimited \
-              -o ${FRONTEND_GEN_PATH}/api/gen/v1/${service_name}/${service_name}_pb.js
+       if [[ ! -f "${ts_gen_path}" ]]; then
+              echo "cant not find <${ts_gen_path}>, gen ts file failed"
+              exit 1
+       fi
 
-       ${PROTOC_GEN_TS_PATH} ${FRONTEND_GEN_PATH}/api/gen/v1/${service_name}/${service_name}_pb.js \
-              -o ${FRONTEND_GEN_PATH}/api/gen/v1/${service_name}/${service_name}_pb.d.ts
+       if [[ ! -d "${gen_path}" ]]; then
+              mkdir -p "${gen_path}"
+       fi
 
-       # Path to this plugin ts-protoc-gen
-       # PROTOC_GEN_TS_PATH="${FRONTEND_GEN_PATH}/node_modules/.bin/protoc-gen-ts"
+       protoc --proto_path ${ROOT_PATH}/proto/ \
+              --plugin=protoc-gen-ts_proto=${ts_gen_path} \
+              --ts_proto_opt=esModuleInterop=true,forceLong=long,outputEncodeMethods=false,outputPartialMethods=false,outputClientImpl=false,outputServices=false \
+              --ts_proto_out=${gen_path} \
+              --proto_path proto/${service_name} \
+              ${service_name}.proto
 
-       # protoc --proto_path ${ROOT_PATH}/proto/ \
-       #        --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
-       #        --js_out="import_style=commonjs,binary:${FRONTEND_GEN_PATH}/api/gen/v1/hello" \
-       #        --ts_out="${FRONTEND_GEN_PATH}/api/gen/v1/hello" \
-       #        --proto_path proto/hello \
-       #        proto/hello/hello.proto
+       # remove useless validate and google api dir
+       # frontend project dont need this
+       rm -rf ${gen_path}/buf ${gen_path}/google &> /dev/null
 }
 
 gen() {
        local services="$@"
        for service in ${services}; do
               gen_go_pb ${service}
-              # gen_ts_pb ${service}
+              gen_ts_pb ${service}
        done
 }
 

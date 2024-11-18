@@ -1,3 +1,5 @@
+"use clinet";
+
 import React from "react";
 
 import { Table } from "@tanstack/react-table";
@@ -21,10 +23,12 @@ const BizLineTableToolbar = <TData,>({
         <BizLineTableToolbarButton icon={MoreHorizontal} label="更多" />
       </div>
       <Input
-        placeholder="Filter tasks..."
-        value={(table.getColumn("bizLine")?.getFilterValue() as string) ?? ""}
+        placeholder="过滤一级项目..."
+        value={
+          (table.getColumn("bizLine_name")?.getFilterValue() as string) ?? ""
+        }
         onChange={(event) =>
-          table.getColumn("bizLine")?.setFilterValue(event.target.value)
+          table.getColumn("bizLine_name")?.setFilterValue(event.target.value)
         }
         className="h-8 w-[150px] lg:w-[250px]"
       />

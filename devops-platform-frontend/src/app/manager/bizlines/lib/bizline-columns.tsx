@@ -39,24 +39,24 @@ export const bizLineColumns: ColumnDef<BizLineEntity>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "bizLine.name",
     header: ({ column }) => <div>一级项目</div>,
-    cell: ({ row }) => <div>{row.original.bizLine.name}</div>,
+    cell: ({ row }) => <div>{row.getValue("bizLine_name")}</div>,
   },
   {
-    accessorKey: "responsibleId",
+    accessorKey: "bizLine.responsibleId",
     header: ({ column }) => <div>负责人</div>,
-    cell: ({ row }) => <div>{row.original.bizLine.responsibleId}</div>,
+    cell: ({ row }) => <div>{row.getValue("bizLine_responsibleId")}</div>,
   },
   {
-    accessorKey: "description",
+    accessorKey: "bizLine.description",
     header: ({ column }) => <div>描述</div>,
-    cell: ({ row }) => <div>{row.original.bizLine.description}</div>,
+    cell: ({ row }) => <div>{row.getValue("bizLine_description")}</div>,
   },
   {
-    accessorKey: "createAt",
+    accessorKey: "bizLine.createAt",
     header: ({ column }) => <div>创建时间</div>,
-    cell: ({ row }) => <div>{row.original.bizLine.name}</div>,
+    cell: ({ row }) => <div>{row.getValue("bizLine_createAt")}</div>,
   },
   {
     id: "actions",

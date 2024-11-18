@@ -1,38 +1,20 @@
+"use client";
+
 import React from "react";
 
-import { z } from "zod";
-import Long from "long";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import BizLineTable from "./components/bizline-table";
-import { GetBizLines } from "./lib/bizline";
-import { BizLineEntitySchema } from "./lib/bizline-entity-schema";
-import { bizLineColumns } from "./lib/bizline-columns";
+import BizLineForm from "./components/bizline-form";
 
-const BizLinePage = async () => {
-  const page: Long = Long.fromString("1");
-  const pageSize: Long = Long.fromString("20");
-  const res = await GetBizLines({
-    page,
-    pageSize,
-  });
-
-  const { bizlines, totalCount } = res;
-  console.log("get bizlines success", bizlines, totalCount.toString());
-
-  const result = z.array(BizLineEntitySchema).safeParse(bizlines);
-  if (!result.success) {
-    console.log("parse data failed, err:", result.error);
-    // TODO: 直接返回出错组件
-    // <Error />
-    return;
-  }
-
-  const zodBizs = result.data;
+const BizLinePage = () => {
+  const queryClient = new QueryClient();
 
   return (
     <div className="p-14">
-      <div className="mb-5">展示一级项目数量等统计信息</div>
-      <BizLineTable data={zodBizs} columns={bizLineColumns} />
+      <p className="text-4xl mb-5 font-semibold">创建一级项目</p>
+      <QueryClientProvider client={queryClient}>
+        <BizLineForm />
+      </QueryClientProvider>
     </div>
   );
 };

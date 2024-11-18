@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Table } from "@tanstack/react-table";
 import {
@@ -24,6 +27,19 @@ type BizLineTablePaginationProps<TData> = {
 const BizLineTablePagination = <TData,>({
   table,
 }: BizLineTablePaginationProps<TData>) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  // https://localhost:3000/manager/bizlines?page=1&page_size=10
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const pageSize = parseInt(searchParams.get("page_size") || "10", 10);
+  const [pagination, setPagination] = useState({
+    page: page,
+    pageSize: pageSize,
+  });
+
+  // TODO: update URL when pagination change
+  useEffect(() => {}, [pagination, router]);
+
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
@@ -43,7 +59,7 @@ const BizLineTablePagination = <TData,>({
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[10, 20, 50, 100].map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>
