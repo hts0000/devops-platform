@@ -1,23 +1,22 @@
 import React from "react";
 
 import { z } from "zod";
-import Long from "long";
 
 import BizLineTable from "./components/bizline-table";
-import { GetBizLines } from "../../../lib/manager/bizline";
+import { ManagerService } from "../../../lib/manager/bizline";
 import { BizLineEntitySchema } from "./lib/bizline-entity-schema";
 import { bizLineColumns } from "./lib/bizline-columns";
 
 const BizLinesPage = async () => {
-  const page: Long = Long.fromString("1");
-  const pageSize: Long = Long.fromString("20");
-  const res = await GetBizLines({
+  const page = "1";
+  const pageSize = "20";
+  const res = await ManagerService.GetBizLines({
     page,
     pageSize,
   });
 
   const { bizlines, totalCount } = res;
-  console.log("get bizlines success", bizlines, totalCount.toString());
+  console.log("get bizlines success", bizlines, totalCount);
 
   const result = z.array(BizLineEntitySchema).safeParse(bizlines);
   if (!result.success) {

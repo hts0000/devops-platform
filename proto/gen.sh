@@ -41,7 +41,7 @@ gen_ts_pb() {
 
        protoc --proto_path ${ROOT_PATH}/proto/ \
               --plugin=protoc-gen-ts_proto=${ts_gen_path} \
-              --ts_proto_opt=esModuleInterop=true,forceLong=long,outputEncodeMethods=false,outputPartialMethods=false,outputClientImpl=false,outputServices=false \
+              --ts_proto_opt=esModuleInterop=true,forceLong=string,outputEncodeMethods=false,outputPartialMethods=false,outputClientImpl=false,outputServices=false \
               --ts_proto_out=${gen_path} \
               --proto_path proto/${service_name} \
               ${service_name}.proto

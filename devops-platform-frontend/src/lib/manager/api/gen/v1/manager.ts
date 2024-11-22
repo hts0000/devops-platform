@@ -5,27 +5,26 @@
 // source: manager.proto
 
 /* eslint-disable */
-import Long from "long";
 
 export const protobufPackage = "manager.v1";
 
 export interface BizLine {
   name: string;
-  responsibleId: Long;
+  responsibleId: string;
   description: string;
 }
 
 export interface BizLineEntity {
-  id: Long;
+  id: string;
   bizLine: BizLine | undefined;
 }
 
 export interface CreateBizLineResponse {
-  id: Long;
+  id: string;
 }
 
 export interface DeleteBizLineRequest {
-  id: Long;
+  id: string;
 }
 
 export interface DeleteBizLineResponse {
@@ -35,24 +34,24 @@ export interface UpdateBizLineResponse {
 }
 
 export interface GetBizLineRequest {
-  id: Long;
+  id: string;
 }
 
 export interface GetBizLinesRequest {
-  page: Long;
-  pageSize: Long;
+  page: string;
+  pageSize: string;
 }
 
 export interface GetBizLinesResponse {
   bizlines: BizLineEntity[];
-  totalCount: Long;
+  totalCount: string;
 }
 
 export interface Project {
 }
 
 export interface ProjectEntity {
-  id: Long;
+  id: string;
   project: Project | undefined;
 }
 
@@ -90,7 +89,7 @@ export interface App {
 }
 
 export interface AppEntity {
-  id: Long;
+  id: string;
   app: App | undefined;
 }
 
@@ -128,7 +127,7 @@ export const BizLine: MessageFns<BizLine> = {
   fromJSON(object: any): BizLine {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      responsibleId: isSet(object.responsibleId) ? Long.fromValue(object.responsibleId) : Long.UZERO,
+      responsibleId: isSet(object.responsibleId) ? globalThis.String(object.responsibleId) : "0",
       description: isSet(object.description) ? globalThis.String(object.description) : "",
     };
   },
@@ -138,8 +137,8 @@ export const BizLine: MessageFns<BizLine> = {
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (!message.responsibleId.equals(Long.UZERO)) {
-      obj.responsibleId = (message.responsibleId || Long.UZERO).toString();
+    if (message.responsibleId !== "0") {
+      obj.responsibleId = message.responsibleId;
     }
     if (message.description !== "") {
       obj.description = message.description;
@@ -151,15 +150,15 @@ export const BizLine: MessageFns<BizLine> = {
 export const BizLineEntity: MessageFns<BizLineEntity> = {
   fromJSON(object: any): BizLineEntity {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? globalThis.String(object.id) : "0",
       bizLine: isSet(object.bizLine) ? BizLine.fromJSON(object.bizLine) : undefined,
     };
   },
 
   toJSON(message: BizLineEntity): unknown {
     const obj: any = {};
-    if (!message.id.equals(Long.UZERO)) {
-      obj.id = (message.id || Long.UZERO).toString();
+    if (message.id !== "0") {
+      obj.id = message.id;
     }
     if (message.bizLine !== undefined) {
       obj.bizLine = BizLine.toJSON(message.bizLine);
@@ -170,13 +169,13 @@ export const BizLineEntity: MessageFns<BizLineEntity> = {
 
 export const CreateBizLineResponse: MessageFns<CreateBizLineResponse> = {
   fromJSON(object: any): CreateBizLineResponse {
-    return { id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO };
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "0" };
   },
 
   toJSON(message: CreateBizLineResponse): unknown {
     const obj: any = {};
-    if (!message.id.equals(Long.UZERO)) {
-      obj.id = (message.id || Long.UZERO).toString();
+    if (message.id !== "0") {
+      obj.id = message.id;
     }
     return obj;
   },
@@ -184,13 +183,13 @@ export const CreateBizLineResponse: MessageFns<CreateBizLineResponse> = {
 
 export const DeleteBizLineRequest: MessageFns<DeleteBizLineRequest> = {
   fromJSON(object: any): DeleteBizLineRequest {
-    return { id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO };
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "0" };
   },
 
   toJSON(message: DeleteBizLineRequest): unknown {
     const obj: any = {};
-    if (!message.id.equals(Long.UZERO)) {
-      obj.id = (message.id || Long.UZERO).toString();
+    if (message.id !== "0") {
+      obj.id = message.id;
     }
     return obj;
   },
@@ -220,13 +219,13 @@ export const UpdateBizLineResponse: MessageFns<UpdateBizLineResponse> = {
 
 export const GetBizLineRequest: MessageFns<GetBizLineRequest> = {
   fromJSON(object: any): GetBizLineRequest {
-    return { id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO };
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "0" };
   },
 
   toJSON(message: GetBizLineRequest): unknown {
     const obj: any = {};
-    if (!message.id.equals(Long.UZERO)) {
-      obj.id = (message.id || Long.UZERO).toString();
+    if (message.id !== "0") {
+      obj.id = message.id;
     }
     return obj;
   },
@@ -235,18 +234,18 @@ export const GetBizLineRequest: MessageFns<GetBizLineRequest> = {
 export const GetBizLinesRequest: MessageFns<GetBizLinesRequest> = {
   fromJSON(object: any): GetBizLinesRequest {
     return {
-      page: isSet(object.page) ? Long.fromValue(object.page) : Long.ZERO,
-      pageSize: isSet(object.pageSize) ? Long.fromValue(object.pageSize) : Long.ZERO,
+      page: isSet(object.page) ? globalThis.String(object.page) : "0",
+      pageSize: isSet(object.pageSize) ? globalThis.String(object.pageSize) : "0",
     };
   },
 
   toJSON(message: GetBizLinesRequest): unknown {
     const obj: any = {};
-    if (!message.page.equals(Long.ZERO)) {
-      obj.page = (message.page || Long.ZERO).toString();
+    if (message.page !== "0") {
+      obj.page = message.page;
     }
-    if (!message.pageSize.equals(Long.ZERO)) {
-      obj.pageSize = (message.pageSize || Long.ZERO).toString();
+    if (message.pageSize !== "0") {
+      obj.pageSize = message.pageSize;
     }
     return obj;
   },
@@ -258,7 +257,7 @@ export const GetBizLinesResponse: MessageFns<GetBizLinesResponse> = {
       bizlines: globalThis.Array.isArray(object?.bizlines)
         ? object.bizlines.map((e: any) => BizLineEntity.fromJSON(e))
         : [],
-      totalCount: isSet(object.totalCount) ? Long.fromValue(object.totalCount) : Long.ZERO,
+      totalCount: isSet(object.totalCount) ? globalThis.String(object.totalCount) : "0",
     };
   },
 
@@ -267,8 +266,8 @@ export const GetBizLinesResponse: MessageFns<GetBizLinesResponse> = {
     if (message.bizlines?.length) {
       obj.bizlines = message.bizlines.map((e) => BizLineEntity.toJSON(e));
     }
-    if (!message.totalCount.equals(Long.ZERO)) {
-      obj.totalCount = (message.totalCount || Long.ZERO).toString();
+    if (message.totalCount !== "0") {
+      obj.totalCount = message.totalCount;
     }
     return obj;
   },
@@ -288,15 +287,15 @@ export const Project: MessageFns<Project> = {
 export const ProjectEntity: MessageFns<ProjectEntity> = {
   fromJSON(object: any): ProjectEntity {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? globalThis.String(object.id) : "0",
       project: isSet(object.project) ? Project.fromJSON(object.project) : undefined,
     };
   },
 
   toJSON(message: ProjectEntity): unknown {
     const obj: any = {};
-    if (!message.id.equals(Long.UZERO)) {
-      obj.id = (message.id || Long.UZERO).toString();
+    if (message.id !== "0") {
+      obj.id = message.id;
     }
     if (message.project !== undefined) {
       obj.project = Project.toJSON(message.project);
@@ -429,15 +428,15 @@ export const App: MessageFns<App> = {
 export const AppEntity: MessageFns<AppEntity> = {
   fromJSON(object: any): AppEntity {
     return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
+      id: isSet(object.id) ? globalThis.String(object.id) : "0",
       app: isSet(object.app) ? App.fromJSON(object.app) : undefined,
     };
   },
 
   toJSON(message: AppEntity): unknown {
     const obj: any = {};
-    if (!message.id.equals(Long.UZERO)) {
-      obj.id = (message.id || Long.UZERO).toString();
+    if (message.id !== "0") {
+      obj.id = message.id;
     }
     if (message.app !== undefined) {
       obj.app = App.toJSON(message.app);

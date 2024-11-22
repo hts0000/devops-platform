@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,12 +18,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BizLineFormType, BizLineFormSchema } from "../lib/bizline-form-schema";
-import { CreateBizLine } from "@/lib/manager/bizline";
+import { ManagerService } from "@/lib/manager/bizline";
 import { BizLine } from "@/lib/manager/api/gen/v1/manager";
 
 type BizLineFormProps = {};
 
 const BizLineForm = ({}: BizLineFormProps) => {
+  // const queryClient = useQueryClient();
+
   const form = useForm<BizLineFormType>({
     resolver: zodResolver(BizLineFormSchema),
     defaultValues: {
@@ -34,33 +35,17 @@ const BizLineForm = ({}: BizLineFormProps) => {
     },
   });
 
-  const createBizLine = async (biz: BizLineFormType) => {
-    const res = await fetch(`http://localhost:18080/v1/manager/bizline`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(biz),
-    });
-    console.log("*****************");
-
-    // TODO: handle error
-    if (!res.ok) {
-    }
-
-    const data = await res.json();
-
-    return data;
-  };
-
-  // const queryClient = useQueryClient();
-
   const mutation = useMutation({
-    mutationFn: CreateBizLine,
-    onSuccess: (data) => {
+    mutationFn: ManagerService.CreateBizLine,
+    onSuccess: (data, variables, context) => {
       // 表单提交成功后，刷新相关数据
       // queryClient.invalidateQueries(["items"]);
+
+      // TODO: toast通知
+
       form.reset(); // 清空表单
     },
-    onError: (error) => {
+    onError: (error, variables, context) => {
       alert(`Error: ${error.message}`);
     },
   });
