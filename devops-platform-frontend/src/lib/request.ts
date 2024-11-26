@@ -1,4 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
+import { ApiError } from "./errors/errors";
 
 export namespace DevOpsService {
   export const serverAddr = "http://localhost:18080";
@@ -29,7 +30,13 @@ export namespace DevOpsService {
     });
 
     if (!res.ok) {
-      // throw res.status;
+      const data = await res.json();
+
+      const err = ApiError.fromJSON(camelcaseKeys(data, { deep: true }));
+
+      // TODO: throw res.status
+      console.log("request error:", res.status, err.code, err.message);
+      throw err.message;
     }
 
     const data = await res.json();

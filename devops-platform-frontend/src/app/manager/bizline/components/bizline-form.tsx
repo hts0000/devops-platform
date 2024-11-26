@@ -5,6 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +25,8 @@ import { BizLine } from "@/lib/manager/api/gen/v1/manager";
 type BizLineFormProps = {};
 
 const BizLineForm = ({}: BizLineFormProps) => {
+  const { toast } = useToast();
+
   // const queryClient = useQueryClient();
 
   const form = useForm<BizLineFormType>({
@@ -42,11 +45,19 @@ const BizLineForm = ({}: BizLineFormProps) => {
       // queryClient.invalidateQueries(["items"]);
 
       // TODO: toast通知
+      toast({
+        title: "创建成功",
+        description: `一级项目名称：${variables.name}`,
+      });
 
       form.reset(); // 清空表单
     },
     onError: (error, variables, context) => {
-      alert(`Error: ${error.message}`);
+      toast({
+        variant: "destructive",
+        title: "创建失败",
+        description: `${error}`,
+      });
     },
   });
 
