@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 
 import { BizLineEntity } from "./bizline-entity-schema";
 import { Button } from "@/components/ui/button";
@@ -54,9 +55,16 @@ export const bizLineColumns: ColumnDef<BizLineEntity>[] = [
     cell: ({ row }) => <div>{row.getValue("bizLine_description")}</div>,
   },
   {
-    accessorKey: "bizLine.createAt",
+    accessorKey: "bizLine.createdAt",
     header: ({ column }) => <div>创建时间</div>,
-    cell: ({ row }) => <div>{row.getValue("bizLine_createAt")}</div>,
+    cell: ({ row }) => (
+      <div>
+        {format(
+          (row.getValue("bizLine_createdAt") as number) * 1000,
+          "yyyy-MM-dd HH:mm:ss"
+        )}
+      </div>
+    ),
   },
   {
     id: "actions",

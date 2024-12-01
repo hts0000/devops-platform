@@ -138,6 +138,7 @@ npm install zod
 npm install @radix-ui/react-icons
 npm install @tanstack/react-table
 npm install @tanstack/react-query
+npm install date-fns --save
 ```
 
 ## Backend

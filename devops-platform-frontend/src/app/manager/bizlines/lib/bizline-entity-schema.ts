@@ -15,6 +15,7 @@ export const BizLineEntitySchema = z.object({
       z.string()
     ),
     description: z.string(),
+    createdAt: z.number().positive(),
   }),
 });
 

@@ -20,6 +20,7 @@ message BizLine {
         expression: "this > 0"
       }];
     string description = 3 [(buf.validate.field).string.max_len = 1024];
+    int32 created_at = 4;
 }
 message BizLineEntity {
     uint64 id = 1;

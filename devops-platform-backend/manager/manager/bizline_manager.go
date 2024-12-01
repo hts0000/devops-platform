@@ -127,6 +127,7 @@ func (s *BizLineService) GetBizLine(ctx context.Context, req *managerpb.GetBizLi
 			Name:          biz.Name,
 			ResponsibleId: uint64(biz.ResponsibleID),
 			Description:   biz.Description,
+			CreatedAt:     int32(biz.CreatedAt.Unix()),
 		},
 	}
 	return res, nil
@@ -162,6 +163,7 @@ func (s *BizLineService) GetBizLines(ctx context.Context, req *managerpb.GetBizL
 				Name:          biz.Name,
 				ResponsibleId: uint64(biz.ResponsibleID),
 				Description:   biz.Description,
+				CreatedAt:     int32(biz.CreatedAt.Unix()),
 			},
 		})
 	}

@@ -12,6 +12,7 @@ export interface BizLine {
   name: string;
   responsibleId: string;
   description: string;
+  createdAt: number;
 }
 
 export interface BizLineEntity {
@@ -129,6 +130,7 @@ export const BizLine: MessageFns<BizLine> = {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       responsibleId: isSet(object.responsibleId) ? globalThis.String(object.responsibleId) : "0",
       description: isSet(object.description) ? globalThis.String(object.description) : "",
+      createdAt: isSet(object.createdAt) ? globalThis.Number(object.createdAt) : 0,
     };
   },
 
@@ -142,6 +144,9 @@ export const BizLine: MessageFns<BizLine> = {
     }
     if (message.description !== "") {
       obj.description = message.description;
+    }
+    if (message.createdAt !== 0) {
+      obj.createdAt = Math.round(message.createdAt);
     }
     return obj;
   },
