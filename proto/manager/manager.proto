@@ -32,7 +32,9 @@ message CreateBizLineResponse {
 message DeleteBizLineRequest {
     uint64 id = 1;
 }
-message DeleteBizLineResponse {}
+message DeleteBizLineResponse {
+    uint64 id = 1;
+}
 message UpdateBizLineResponse {}
 message GetBizLineRequest {
     uint64 id = 1;

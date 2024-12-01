@@ -60,14 +60,25 @@ func (s *BizLineService) DeleteBizLine(ctx context.Context, req *managerpb.Delet
 		return nil, status.Error(codes.InvalidArgument, "invalid argument")
 	}
 
-	biz, err := s.MySQL.DeleteBizLine(ctx, uint(req.Id))
+	biz, err := s.MySQL.GetBizLineByID(ctx, uint(req.Id))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			s.Logger.Error("delete bizline failed, record not found", zap.Uint("id", uint(req.Id)))
+			return nil, status.Error(codes.NotFound, "record not found")
+		}
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+
+	_, err = s.MySQL.DeleteBizLine(ctx, biz.ID)
 	if err != nil {
 		s.Logger.Error("delete bizline failed", zap.Uint("id", uint(req.Id)), zap.Error(err))
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
 	s.Logger.Info("delete bizline success", zap.Any("bizline", biz))
 
-	res := &managerpb.DeleteBizLineResponse{}
+	res := &managerpb.DeleteBizLineResponse{
+		Id: uint64(biz.ID),
+	}
 	return res, nil
 }
 
@@ -148,7 +159,7 @@ func (s *BizLineService) GetBizLines(ctx context.Context, req *managerpb.GetBizL
 
 	if total == 0 || len(bizs) == 0 {
 		s.Logger.Warn("bizlines has not record", zap.Int64("total", total), zap.Int("bizsLen", len(bizs)))
-		return nil, status.Error(codes.NotFound, "bizlines has not record")
+		return nil, status.Error(codes.OK, "bizlines has not record")
 	}
 
 	res := &managerpb.GetBizLinesResponse{

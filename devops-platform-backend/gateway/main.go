@@ -64,14 +64,14 @@ func main() {
 					panic(err)
 				}
 
-				logger.Info("received request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("body", string(body)), zap.String("traceid", ""))
+				logger.Info("received request", zap.String("host", r.URL.Host), zap.String("method", r.Method), zap.String("path", r.URL.Path), zap.String("body", string(body)), zap.String("traceid", ""))
 
 				// 重置Body为未读
 				r.Body = io.NopCloser(bytes.NewBuffer(body))
 
 				hf(w, r, pathParams)
 
-				logger.Info("handled request", zap.String("host", r.URL.Host), zap.String("scheme", r.URL.Scheme), zap.String("path", r.URL.Path), zap.String("traceid", ""))
+				logger.Info("handled request", zap.String("host", r.URL.Host), zap.String("method", r.Method), zap.String("path", r.URL.Path), zap.String("traceid", ""))
 			}
 		}),
 	)
@@ -113,7 +113,20 @@ func main() {
 		}
 	}
 
+	h := cors.New(cors.Options{
+		AllowedOrigins: []string{
+			"http://localhost:3000",
+		},
+		AllowedMethods: []string{
+			http.MethodPost,
+			http.MethodDelete,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodGet,
+		},
+	}).Handler(mux)
+
 	addr := ":18080"
 	logger.Info("grpc gateway started", zap.String("addr", addr))
-	logger.Fatal("cannot listen and server", zap.Error(http.ListenAndServe(addr, cors.Default().Handler(mux))))
+	logger.Fatal("cannot listen and server", zap.Error(http.ListenAndServe(addr, h)))
 }

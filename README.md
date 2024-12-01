@@ -131,6 +131,7 @@ npx shadcn@latest add table
 npx shadcn@latest add checkbox
 npx shadcn@latest add dropdown-menu
 npx shadcn@latest add form
+npx shadcn@latest add alert-dialog
 
 npm install ts-proto
 npm install long
