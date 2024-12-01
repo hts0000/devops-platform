@@ -4,7 +4,7 @@ import React from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BizLineFormType, BizLineFormSchema } from "../lib/bizline-form-schema";
-import { ManagerService } from "@/lib/manager/bizline";
 import { BizLine } from "@/lib/manager/api/gen/v1/manager";
+import { CreateBizLine } from "@/lib/manager/bizline";
 
 type BizLineFormProps = {};
 
@@ -39,7 +39,7 @@ const BizLineForm = ({}: BizLineFormProps) => {
   });
 
   const mutation = useMutation({
-    mutationFn: ManagerService.CreateBizLine,
+    mutationFn: CreateBizLine,
     onSuccess: (data, variables, context) => {
       // 表单提交成功后，刷新相关数据
       // queryClient.invalidateQueries(["items"]);

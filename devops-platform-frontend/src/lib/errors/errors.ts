@@ -9,7 +9,7 @@ const Code2Message: Record<number, string> = {
 };
 
 interface MessageFns<T> {
-  fromJSON(object: any): T;
+  fromJSON(object: unknown): T;
   toJSON(message: T): unknown;
 }
 
@@ -19,22 +19,26 @@ export interface ApiError {
 }
 
 export const ApiError: MessageFns<ApiError> = {
-  fromJSON(object: any): ApiError {
-    if (!object.code) {
+  fromJSON(object: unknown): ApiError {
+    if (typeof object === "object" && object && Object.hasOwn(object, "code")) {
+      const obj = object as { code: number };
+      const code = obj.code;
       return {
-        code: 0,
-        message: Code2Message[0],
+        code: code,
+        message: Code2Message[code],
       };
     }
-    const code = object.code as number;
     return {
-      code: code,
-      message: Code2Message[code],
+      code: 0,
+      message: Code2Message[0],
     };
   },
 
   toJSON(message: ApiError): unknown {
-    const obj: any = {};
+    const obj: { code: number; message: string } = {
+      code: 0,
+      message: "",
+    };
     if (message.code !== 0) {
       obj.code = message.code;
     }

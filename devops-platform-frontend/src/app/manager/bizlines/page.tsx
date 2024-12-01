@@ -3,14 +3,14 @@ import React from "react";
 import { z } from "zod";
 
 import BizLineTable from "./components/bizline-table";
-import { ManagerService } from "../../../lib/manager/bizline";
 import { BizLineEntitySchema } from "./lib/bizline-entity-schema";
 import { bizLineColumns } from "./lib/bizline-columns";
+import { GetBizLines } from "@/lib/manager/bizline";
 
 const BizLinesPage = async () => {
   const page = "1";
   const pageSize = "20";
-  const res = await ManagerService.GetBizLines({
+  const res = await GetBizLines({
     page,
     pageSize,
   });
